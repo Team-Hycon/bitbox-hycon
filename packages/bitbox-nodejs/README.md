@@ -4,10 +4,16 @@ Bitbox Hardware Wallet Node JS API for Hycon.
 ## Examples
 
 ```js
+import hid = require("bitbox-hid")
 import { Bitbox, IResponseGetXPub } from "@glosfer/bitbox-nodejs";
 import HDKey = require("hdkey")
 
 const getHyconAddress = async () => {
+  const hidInfo = hid.getDeviceInfo()
+  if (!hidInfo) {
+    console.log(`Digital BitBox not plugged in`)
+	return
+  }
   const bitbox = new Bitbox(hidInfo.path)
   const xpub: IResponseGetXPub = await bitbox.getXPub("m/44'/1397'/0'/0/0")
   const hdkey = HDKey.parseExtendedKey(xpub.xpub)

@@ -1,0 +1,27 @@
+{
+  "name": "bitbox-hid",
+  "version": "1.0.0",
+  "description": "Node implementation of the communication layer using `node-hid` (USB)",
+  "keywords": [
+    "Bitbox",
+    "BitboxWallet",
+    "HID",
+    "USB",
+    "Hardware Wallet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Team-Hycon/bitbox-hycon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Team-Hycon/bitbox-hycon/issues"
+  },
+  "homepage": "https://github.com/Team-Hycon/bitbox-hycon",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "src/hid.js",
+  "scripts": {
+    "clean": "rm -rf lib/ node_modules/"
+  }
+}

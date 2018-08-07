@@ -5,7 +5,7 @@ This repository hosts libraries to communicate with BitBox hardware wallet.
 ## Published packages
 
 | Package | Description |
-| ----------------------|
+| --------|-------------|
 | [`bitbox-hid`](/packages/bitbox-hid) | Node implementation of the communication layer using `node-hid` (USB) |
 | [`@glosfer/bitbox-nodejs`](/packages/bitbox-nodejs) | Bitbox API for Hycon |
 

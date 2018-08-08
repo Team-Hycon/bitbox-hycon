@@ -1,5 +1,5 @@
 // tslint:disable-next-line:no-var-requires
-const Communication = require("./lib/communication")
+const { Communication } = require("@glosfer/bitbox-nodejs")
 // tslint:disable-next-line:no-var-requires
 const pbkdf2 = require("pbkdf2")
 
@@ -28,7 +28,7 @@ function stretchKey(key: any) {
     return pbkdf2.pbkdf2Sync(key, "Digital Bitbox", 20480, 64, "sha512").toString("hex")
 }
 
-export class Bitbox {
+export class BitBox {
     // set password or not
     public initialize: boolean
     // has wallet or not

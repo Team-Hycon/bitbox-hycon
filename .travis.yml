@@ -6,6 +6,12 @@ cache:
   directories:
     - packages/bitbox-nodejs/node_modules
 
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-get install libusb-1.0-0-dev;
+      sudo apt-get install libudev-dev;
+    fi
+
 script:
   - cd packages/bitbox-nodejs
   - npm install

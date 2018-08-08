@@ -24,10 +24,10 @@ npm install
 
 Checklist before deploying a new release:
 
-* you have the right on NPM
+* you have the right in the glosfer org on NPM
 * you have run `npm login` once (check `npm whoami`)
 * Go to **master** branch
-  * your master point on repository (check with `git config remote.$(git config branch.master.remote).url` and fix it with `git branch --set-upstream master origin/master`)
+  * your master point on glosfer repository (check with `git config remote.$(git config branch.master.remote).url` and fix it with `git branch --set-upstream master origin/master`)
   * you are in sync (`git pull`) and there is no changes in `git status`
 * Run `npm` once, there is still no changes in `git status`
 

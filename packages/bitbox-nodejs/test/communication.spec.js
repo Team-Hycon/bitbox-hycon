@@ -2,7 +2,7 @@ const { Communication } = require("../src/index")
 
 describe("Communication test", () => {
 
-    it("create Communication when device is not connected", () => {
+    it("create new Communication class when device is not connected", () => {
         function result() {
             new Communication(null)
         }

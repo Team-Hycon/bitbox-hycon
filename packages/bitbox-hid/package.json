@@ -22,6 +22,13 @@
   },
   "main": "src/hid.js",
   "scripts": {
-    "clean": "rm -rf lib/ node_modules/"
+    "clean": "rm -rf lib/ node_modules/",
+    "test": "./node_modules/.bin/jasmine-node test"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.15.0"
+  },
+  "dependencies": {
+    "node-hid": "^0.7.3"
   }
 }

@@ -34,9 +34,10 @@ Checklist before deploying a new release:
 **deploy a new release**
 
 ```
- npm install
- npm test
- npm publish
+npm clean
+npm install
+npm test
+npm publish
 ```
 
 then, go to [/releases](https://github.com/Team-Hycon/bitbox-hycon/releases) and create a release with change logs.

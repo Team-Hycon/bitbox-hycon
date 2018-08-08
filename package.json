@@ -1,10 +1,10 @@
 {
-  "name": "bitbox-hycon",
-  "version": "0.0.0",
-  "scripts": {
-    "clean": "rm -rf lib/ node_modules/ packages/*/node_modules",
-    "build": "tsc --declaration",
-    "lint": "tslint packages/**/src -p tsconfig.json",
-    "publish": "npm && npm run clean && npm run build && npm publish --registry=https://registry.npmjs.org/"
-  }
+    "name": "bitbox-hycon",
+    "version": "0.0.0",
+    "scripts": {
+        "clean": "rm -rf lib/ node_modules/ packages/*/node_modules",
+        "build": "tsc --declaration",
+        "lint": "tslint packages/**/src -p tsconfig.json",
+        "publish": "npm && npm run clean && npm run build && npm publish --registry=https://registry.npmjs.org/"
+    }
 }

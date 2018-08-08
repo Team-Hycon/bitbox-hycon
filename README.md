@@ -1,4 +1,7 @@
 # BitBox Hycon
+
+[![Build Status](https://travis-ci.org/arigatodl/bitbox-hycon.svg?branch=master)](https://travis-ci.org/arigatodl/bitbox-hycon)
+
 This repository hosts libraries to communicate with BitBox hardware wallet.
 
 

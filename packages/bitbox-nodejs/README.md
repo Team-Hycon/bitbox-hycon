@@ -1,14 +1,14 @@
 # BitBox NodeJS
 Node implementation of the communication layer using `node-hid` (USB).
 
-## Examples
+## Example
 
 ```js
-import hid from "@glosfer/bitbox-nodejs";
+import { hid } from "@glosfer/bitbox-nodejs";
 
 const hidInfo = hid.getDeviceInfo()
 if (!hidInfo) {
-  console.log(`Digital Bitbox is not plugged in`)
+  console.log(`Digital BitBox is not plugged in`)
 } else {
   console.log(`Successfully retrieved info: ${hidInfo}`)
 }
@@ -16,7 +16,7 @@ if (!hidInfo) {
 
 ### Install dependencies
 
-```bash
+```
 npm install
 ```
 
@@ -50,4 +50,4 @@ If you'd like to help us out, the [Pull Request](https://github.com/Team-Hycon/b
 **If you have found a security bug, please contact us at [security@glosfer.com](security@glosfer.com).**
 
 ## Credits
-Kudos to [SHIFT team](https://shiftcrypto.ch/team) (Digital BitBox developers)
+Kudos to [SHIFT team](https://shiftcrypto.ch/team) (Digital BitBox hardware wallet developers)

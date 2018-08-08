@@ -1,58 +1,42 @@
-# BitBox NodeJS
-Bitbox Hardware Wallet Node JS API for Hycon.
+# BitBox HID
+Node implementation of the communication layer using `node-hid` (USB).
 
 ## Examples
 
 ```js
-import hid = require("bitbox-hid")
-import { Bitbox, IResponseGetXPub } from "@glosfer/bitbox-nodejs";
-import HDKey = require("hdkey")
+import hid from "bitbox-nodejs";
 
-const getHyconAddress = async () => {
-  const hidInfo = hid.getDeviceInfo()
-  if (!hidInfo) {
-    console.log(`Digital BitBox not plugged in`)
-	return
-  }
-  const bitbox = new Bitbox(hidInfo.path)
-  const xpub: IResponseGetXPub = await bitbox.getXPub("m/44'/1397'/0'/0/0")
-  const hdkey = HDKey.parseExtendedKey(xpub.xpub)
-  const result = hdkey.publicKey
-  return result;
-};
-getHyconAddress().then(a => console.log(`Public key: ${a.toString("hex")}`));
+const hidInfo = hid.getDeviceInfo()
+if (!hidInfo) {
+  console.log(`Digital Bitbox is not plugged in`)
+} else {
+  console.log(`Successfully retrieved info: ${hidInfo}`)
+}
 ```
 
 ### Install dependencies
 
 ```bash
-npm
-```
-
-### Build
-
-```bash
-npm build
+npm install
 ```
 
 ### Deploy
 
 Checklist before deploying a new release:
 
-* you have the right in the glosfer org on NPM
+* you have the right on NPM
 * you have run `npm login` once (check `npm whoami`)
 * Go to **master** branch
-  * your master point on glosfer repository (check with `git config remote.$(git config branch.master.remote).url` and fix it with `git branch --set-upstream master origin/master`)
+  * your master point on repository (check with `git config remote.$(git config branch.master.remote).url` and fix it with `git branch --set-upstream master origin/master`)
   * you are in sync (`git pull`) and there is no changes in `git status`
-* Run `yarn` once, there is still no changes in `git status`
+* Run `npm` once, there is still no changes in `git status`
 
 **deploy a new release**
 
 ```
- npm clean
- npm
- npm build
- npm run publish
+ npm install
+ npm test
+ npm publish
 ```
 
 then, go to [/releases](https://github.com/Team-Hycon/bitbox-hycon/releases) and create a release with change logs.
@@ -63,3 +47,6 @@ If you have an issue, feel free to add it to the [Issues](https://github.com/Tea
 If you'd like to help us out, the [Pull Request](https://github.com/Team-Hycon/bitbox-hycon/pulls) tab is a great place to start.
 
 **If you have found a security bug, please contact us at [security@glosfer.com](security@glosfer.com).**
+
+## Credits
+Kudos to [SHIFT team](https://shiftcrypto.ch/team) (Digital BitBox developers)

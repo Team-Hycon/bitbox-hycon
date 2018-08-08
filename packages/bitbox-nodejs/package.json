@@ -1,34 +1,34 @@
 {
-  "name": "@glosfer/bitbox-nodejs",
-  "version": "0.0.1-beta.0",
-  "description": "Bitbox Hardware Wallet Node JS API for Hycon.",
+  "name": "bitbox-nodejs",
+  "version": "1.0.0",
+  "description": "Node implementation of the communication layer using `node-hid` (USB)",
   "keywords": [
     "Bitbox",
     "BitboxWallet",
-    "Hycon",
-    "hyc",
+    "HID",
+    "USB",
     "Hardware Wallet"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/Team-Hycon/bitbox-nodejs.git"
+    "url": "git://github.com/Team-Hycon/bitbox-hycon.git"
   },
   "bugs": {
-    "url": "https://github.com/Team-Hycon/bitbox-nodejs/issues"
+    "url": "https://github.com/Team-Hycon/bitbox-hycon/issues"
   },
-  "homepage": "https://github.com/Team-Hycon/bitbox-nodejs",
+  "homepage": "https://github.com/Team-Hycon/bitbox-hycon",
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/bitbox.js",
+  "main": "src/index.js",
   "scripts": {
     "clean": "rm -rf lib/ node_modules/",
-    "build": "tsc --declaration",
-    "lint": "tslint -p tsconfig.json"
+    "test": "./node_modules/.bin/jasmine-node test"
   },
   "devDependencies": {
-    "@types/node": "^10.5.1",
-    "tslint": "^5.10.0",
-    "typescript": "^2.9.2"
+    "jasmine-node": "^1.15.0"
+  },
+  "dependencies": {
+    "node-hid": "^0.7.3"
   }
 }

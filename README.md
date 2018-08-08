@@ -6,15 +6,15 @@ This repository hosts libraries to communicate with BitBox hardware wallet.
 
 | Package | Description |
 | --------|-------------|
-| [`bitbox-hid`](/packages/bitbox-hid) | Node implementation of the communication layer using `node-hid` (USB) |
-| [`@glosfer/bitbox-nodejs`](/packages/bitbox-nodejs) | Bitbox API for Hycon |
+| [`bitbox-nodejs`](/packages/bitbox-nodejs) | Node implementation of the communication layer using `node-hid` (USB) |
+| [`@glosfer/bitbox-app-hycon`](/packages/bitbox-app-hycon) | Bitbox API for Hycon |
 
 
 ## Examples
 
 ```js
-import hid = require("bitbox-hid")
-import { Bitbox, IResponseGetXPub } from "@glosfer/bitbox-nodejs";
+import hid = require("bitbox-nodejs")
+import { Bitbox, IResponseGetXPub } from "@glosfer/bitbox-app-hycon";
 import HDKey = require("hdkey")
 
 const getHyconAddress = async () => {

@@ -1,6 +1,6 @@
-const hid = require("../src/hid.js")
+const { hid } = require("../src/index")
 
-describe("Connection test", () => {
+describe("HID test", () => {
 
     it("call getDeviceInfo when device is not connected", () => {
         const hidInfo = hid.getDeviceInfo()

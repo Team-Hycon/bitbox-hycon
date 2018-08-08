@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "10.4.1"
+
+cache:
+  directories:
+    - packages/bitbox-nodejs/node_modules
+
+script:
+  - cd packages/bitbox-nodejs
+  - npm install
+  - npm test

@@ -4,8 +4,8 @@ import { PublicKey } from "../../common/publicKey"
 import { Tx } from "../../common/tx"
 import { SignedTx } from "../../common/txSigned"
 import { Hash } from "../../util/hash"
-import { Bitbox, IResponseGetXPub, IResponseSign, IResponseStatus } from "@glosfer/bitbox-nodejs"
-import hid = require("bitbox-hid")
+import { BitBox, IResponseGetXPub, IResponseSign, IResponseStatus } from "@glosfer/bitbox-nodejs"
+import { hid } from "@glosfer/bitbox-nodejs"
 // tslint:disable-next-line:no-var-requires
 const input = require("input")
 
@@ -15,7 +15,7 @@ export async function main() {
         // tslint:disable-next-line:no-console
         console.warn(`Digital Bitbox not plugged in`)
     } else {
-        const bitbox = new Bitbox(hidInfo.path)
+        const bitbox = new BitBox(hidInfo.path)
         // tslint:disable-next-line:no-console
         console.log(`Found Digital Bitbox ${bitbox.getDeviceID()}`)
 

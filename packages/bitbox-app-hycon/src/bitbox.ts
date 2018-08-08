@@ -15,7 +15,6 @@ export interface IResponseSeed { error: string, seed: string }
 export interface IResponseDelete { error: string, backup: string }
 export interface IResponseReset { error: string, reset: string }
 export interface IResponsePassword { error: string, password: string }
-interface IRespondCom { error: string, message: string }
 export interface ICommunication {
     sendPlain(cmd: string): any,
     sendEncrypted(cmd: string, fun: (respond: any) => void): void,
@@ -113,7 +112,6 @@ export class BitBox {
             if (!name || !nameRegex.exec(name)) {
                 rejected("Only 1 to 31 alphanumeric characters are allowed.")
             }
-            const stretchedKey = stretchKey(this.password)
             this.communication.sendEncrypted('{"name": "' + name + '"}', (response: IResponseName) => {
                 if (!response.error) {
                     resolved(response)

@@ -7,27 +7,27 @@ This repository hosts libraries to communicate with BitBox hardware wallet.
 | Package | Description |
 | --------|-------------|
 | [`bitbox-nodejs`](/packages/bitbox-nodejs) | Node implementation of the communication layer using `node-hid` (USB) |
-| [`@glosfer/bitbox-app-hycon`](/packages/bitbox-app-hycon) | Bitbox API for Hycon |
+| [`@glosfer/bitbox-app-hycon`](/packages/bitbox-app-hycon) | BitBox API for Hycon |
 
 
 ## Examples
 
 ```js
-import hid = require("bitbox-nodejs")
-import { Bitbox, IResponseGetXPub } from "@glosfer/bitbox-app-hycon";
+import { hid } = require("bitbox-nodejs")
+import { BitBox, IResponseGetXPub } from "@glosfer/bitbox-app-hycon";
 import HDKey = require("hdkey")
 
 const getHyconAddress = async () => {
-  const hidInfo = hid.getDeviceInfo()
-  if (!hidInfo) {
-    console.log(`Digital BitBox not plugged in`)
-	return
-  }
-  const bitbox = new Bitbox(hidInfo.path)
-  const xpub: IResponseGetXPub = await bitbox.getXPub("m/44'/1397'/0'/0/0")
-  const hdkey = HDKey.parseExtendedKey(xpub.xpub)
-  const result = hdkey.publicKey
-  return result;
+    const hidInfo = hid.getDeviceInfo()
+    if (!hidInfo) {
+        console.log(`Digital BitBox not plugged in`)
+        return
+    }
+    const bitbox = new BitBox(hidInfo.path)
+    const xpub: IResponseGetXPub = await bitbox.getXPub("m/44'/1397'/0'/0/0")
+    const hdkey = HDKey.parseExtendedKey(xpub.xpub)
+    const result = hdkey.publicKey
+    return result;
 };
 getHyconAddress().then(a => console.log(`Public key: ${a.toString("hex")}`));
 ```

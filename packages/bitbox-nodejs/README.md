@@ -1,10 +1,10 @@
-# BitBox HID
+# BitBox NodeJS
 Node implementation of the communication layer using `node-hid` (USB).
 
 ## Examples
 
 ```js
-import hid from "bitbox-nodejs";
+import hid from "@glosfer/bitbox-nodejs";
 
 const hidInfo = hid.getDeviceInfo()
 if (!hidInfo) {

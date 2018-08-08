@@ -1,24 +1,24 @@
-# BitBox NodeJS
-Bitbox Hardware Wallet Node JS API for Hycon.
+# BitBox API for Hycon
+BitBox Hardware Wallet Node JS API for Hycon.
 
-## Examples
+## Example
 
 ```js
-import hid = require("bitbox-hid")
-import { Bitbox, IResponseGetXPub } from "@glosfer/bitbox-nodejs";
+import { hid } = require("@glosfer/bitbox-nodejs")
+import { BitBox, IResponseGetXPub } from "@glosfer/bitbox-app-hycon";
 import HDKey = require("hdkey")
 
 const getHyconAddress = async () => {
-  const hidInfo = hid.getDeviceInfo()
-  if (!hidInfo) {
-    console.log(`Digital BitBox not plugged in`)
-	return
-  }
-  const bitbox = new Bitbox(hidInfo.path)
-  const xpub: IResponseGetXPub = await bitbox.getXPub("m/44'/1397'/0'/0/0")
-  const hdkey = HDKey.parseExtendedKey(xpub.xpub)
-  const result = hdkey.publicKey
-  return result;
+    const hidInfo = hid.getDeviceInfo()
+    if (!hidInfo) {
+        console.log(`Digital BitBox not plugged in`)
+        return
+    }
+    const bitbox = new BitBox(hidInfo.path)
+    const xpub: IResponseGetXPub = await bitbox.getXPub("m/44'/1397'/0'/0/0")
+    const hdkey = HDKey.parseExtendedKey(xpub.xpub)
+    const result = hdkey.publicKey
+    return result;
 };
 getHyconAddress().then(a => console.log(`Public key: ${a.toString("hex")}`));
 ```
@@ -26,7 +26,7 @@ getHyconAddress().then(a => console.log(`Public key: ${a.toString("hex")}`));
 ### Install dependencies
 
 ```bash
-npm
+npm install
 ```
 
 ### Build
@@ -44,15 +44,15 @@ Checklist before deploying a new release:
 * Go to **master** branch
   * your master point on glosfer repository (check with `git config remote.$(git config branch.master.remote).url` and fix it with `git branch --set-upstream master origin/master`)
   * you are in sync (`git pull`) and there is no changes in `git status`
-* Run `yarn` once, there is still no changes in `git status`
+* Run `npm` once, there is still no changes in `git status`
 
 **deploy a new release**
 
 ```
  npm clean
- npm
+ npm install
  npm build
- npm run publish
+ npm publish
 ```
 
 then, go to [/releases](https://github.com/Team-Hycon/bitbox-hycon/releases) and create a release with change logs.

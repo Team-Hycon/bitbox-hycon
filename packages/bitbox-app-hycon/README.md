@@ -49,7 +49,7 @@ Checklist before deploying a new release:
 **deploy a new release**
 
 ```
- npm run clean
+ npm clean
  npm install
  npm run lint
  npm run build

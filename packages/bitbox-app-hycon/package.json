@@ -1,6 +1,6 @@
 {
     "name": "@glosfer/bitbox-app-hycon",
-    "version": "0.0.1-beta.0",
+    "version": "0.0.1",
     "description": "Bitbox Hardware Wallet Node JS API for Hycon.",
     "keywords": [
         "Bitbox",
@@ -11,12 +11,12 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git://github.com/Team-Hycon/bitbox-nodejs.git"
+        "url": "git://github.com/Team-Hycon/bitbox-hycon.git"
     },
     "bugs": {
-        "url": "https://github.com/Team-Hycon/bitbox-nodejs/issues"
+        "url": "https://github.com/Team-Hycon/bitbox-hycon/issues"
     },
-    "homepage": "https://github.com/Team-Hycon/bitbox-nodejs",
+    "homepage": "https://github.com/Team-Hycon/bitbox-hycon",
     "publishConfig": {
         "access": "public"
     },

@@ -16,3 +16,7 @@ script:
   - cd packages/bitbox-nodejs
   - npm install
   - npm test
+  - cd ../packages/bitbox-app-hycon
+  - npm install
+  - npm run lint
+  - npm run build

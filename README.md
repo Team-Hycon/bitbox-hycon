@@ -7,10 +7,10 @@ This repository hosts libraries to communicate with BitBox hardware wallet.
 
 ## Published packages
 
-| Package | Description |
-| --------|-------------|
-| [`@glosfer/bitbox-nodejs`](/packages/bitbox-nodejs) | Node implementation of the communication layer using `node-hid` (USB) |
-| [`@glosfer/bitbox-app-hycon`](/packages/bitbox-app-hycon) | BitBox API for Hycon |
+| Package | Version | Description |
+| --------|---------|-------------|
+| [`@glosfer/bitbox-nodejs`](/packages/bitbox-nodejs) | [![npm](https://img.shields.io/npm/v/@glosfer/bitbox-nodejs.svg)](https://www.npmjs.com/package/@glosfer/bitbox-nodejs) | Node implementation of the communication layer using `node-hid` (USB) |
+| [`@glosfer/bitbox-app-hycon`](/packages/bitbox-app-hycon) | [![npm](https://img.shields.io/npm/v/@glosfer/bitbox-app-hycon.svg)](https://www.npmjs.com/package/@glosfer/bitbox-app-hycon) | BitBox API for Hycon |
 
 
 ## Example

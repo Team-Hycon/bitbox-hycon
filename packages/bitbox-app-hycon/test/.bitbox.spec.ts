@@ -4,7 +4,7 @@ import { PublicKey } from "../../common/publicKey"
 import { Tx } from "../../common/tx"
 import { SignedTx } from "../../common/txSigned"
 import { Hash } from "../../util/hash"
-import { BitBox, IResponseGetXPub, IResponseSign, IResponseStatus } from "@glosfer/bitbox-nodejs"
+import { BitBox, IResponseGetXPub, IResponseSign, IResponseStatus } from "../src/bitbox"
 import { hid } from "@glosfer/bitbox-nodejs"
 // tslint:disable-next-line:no-var-requires
 const input = require("input")

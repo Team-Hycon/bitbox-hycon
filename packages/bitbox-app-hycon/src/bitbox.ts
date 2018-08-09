@@ -1,7 +1,5 @@
-// tslint:disable-next-line:no-var-requires
-const { Communication } = require("@glosfer/bitbox-nodejs")
-// tslint:disable-next-line:no-var-requires
-const pbkdf2 = require("pbkdf2")
+import { Communication } from "@glosfer/bitbox-nodejs"
+import { pbkdf2Sync } from "pbkdf2"
 
 const nameRegex = /^[0-9a-zA-Z-_ ]{1,31}$/
 export interface IresponseEcho { echo: string, error: IResponseError }
@@ -15,16 +13,10 @@ export interface IResponseSeed { error: string, seed: string }
 export interface IResponseDelete { error: string, backup: string }
 export interface IResponseReset { error: string, reset: string }
 export interface IResponsePassword { error: string, password: string }
-export interface ICommunication {
-    sendPlain(cmd: string): any,
-    sendEncrypted(cmd: string, fun: (respond: any) => void): void,
-    setCommunicationSecret(password: string): void
-    close(): void
-}
 
 export interface IResponseName { error: string, name: string }
 function stretchKey(key: any) {
-    return pbkdf2.pbkdf2Sync(key, "Digital Bitbox", 20480, 64, "sha512").toString("hex")
+    return pbkdf2Sync(key, "Digital Bitbox", 20480, 64, "sha512").toString("hex")
 }
 
 export class BitBox {
@@ -32,7 +24,7 @@ export class BitBox {
     public initialize: boolean
     // has wallet or not
     public seeded: boolean
-    private communication: ICommunication
+    private communication: Communication
     private password: string
     private deviceID: string
 

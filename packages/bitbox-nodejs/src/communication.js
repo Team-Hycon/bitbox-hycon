@@ -64,18 +64,22 @@ function append(byteArray, buffer, maxLength) {
  * of bytes of the body that were written.
  */
 function send(device, header, body, offset) {
-    let byteArray = [];
-    let usedForHeader = append(byteArray, header, usbReportSize);
-    let bytesOfBody = append(byteArray, body.slice(offset), usbReportSize - usedForHeader);
-    if ((usedForHeader + bytesOfBody) < usbReportSize) {
-        let fillLength = usbReportSize - (usedForHeader + bytesOfBody);
-        append(byteArray, Buffer.alloc(fillLength, 0xee), fillLength);
+    try {
+        let byteArray = [];
+        let usedForHeader = append(byteArray, header, usbReportSize);
+        let bytesOfBody = append(byteArray, body.slice(offset), usbReportSize - usedForHeader);
+        if ((usedForHeader + bytesOfBody) < usbReportSize) {
+            let fillLength = usbReportSize - (usedForHeader + bytesOfBody);
+            append(byteArray, Buffer.alloc(fillLength, 0xee), fillLength);
+        }
+        // console.log('---- request ----');
+        // console.log(JSON.stringify(byteArray));
+        // console.log('-----------------');
+        device.write(byteArray)
+        return bytesOfBody;
+    } catch (e) {
+        throw e
     }
-    console.log('---- request ----');
-    console.log(JSON.stringify(byteArray));
-    console.log('-----------------');
-    device.write(byteArray)
-    return bytesOfBody;
 }
 
 /**
@@ -83,16 +87,21 @@ function send(device, header, body, offset) {
  * The message is chunked into 64 byte frames.
  */
 function sendFrame(device, msg) {
-    var initialHeader = getInitialFrameHeader(msg.length);
-    var body = getBody(msg);
-    var bodyOffset = 0;
-    // write initial header + body frame + cont. header + body frame, etc. and fill with 0xee
-    bodyOffset = send(device, initialHeader, body, bodyOffset);
-    let sequence = 0;
-    while (bodyOffset < msg.length) {
-        bodyOffset += send(device, getContinuedFrameHeader(sequence), body, bodyOffset);
-        sequence++;
-    }
+    try {
+        var initialHeader = getInitialFrameHeader(msg.length);
+        var body = getBody(msg);
+        var bodyOffset = 0;
+        // write initial header + body frame + cont. header + body frame, etc. and fill with 0xee
+        bodyOffset = send(device, initialHeader, body, bodyOffset);
+        let sequence = 0;
+        while (bodyOffset < msg.length) {
+            bodyOffset += send(device, getContinuedFrameHeader(sequence), body, bodyOffset);
+            sequence++;
+        }
+    } catch (e) {
+        throw e
+    } 
+
 }
 
 function toString(bytes, length) {
@@ -108,34 +117,39 @@ function toString(bytes, length) {
  * The length of the data is always 64 bytes.
  */
 function read(device) {
-    let data = device.readSync();
-    if (data.length < 7) {
-        throw new Error('Invalid response received from device');
-    }
-    if (data[0] != 0xff || data[1] != 0 || data[2] != 0 || data[3] != 0) {
-        throw new Error('USB command ID mismatch');
-    }
-    if (data[4] != hwwCMD) {
-        throw new Error('USB command frame mismatch (' + data[4] + ', expected ' + hwwCMD + ')');
-    }
-    let readLength = data[5] * 256 + data[6];
-    console.log('---- response ----');
-    console.log(JSON.stringify(Array.prototype.slice.call(data, 0)));
-    console.log('-----------------');
-    let readBuffer = Buffer.allocUnsafe(readLength);
-    let alreadyRead = readBuffer.write(toString(data.slice(7), readLength), 0);
-    while (alreadyRead < readLength) {
-        data = device.readSync();
-        if (data.length < 5) {
+    try{
+        let data = device.readSync();
+        if (data.length < 7) {
             throw new Error('Invalid response received from device');
         }
-        alreadyRead += readBuffer.write(toString(data.slice(5), readLength), alreadyRead);
+        if (data[0] != 0xff || data[1] != 0 || data[2] != 0 || data[3] != 0) {
+            throw new Error('USB command ID mismatch');
+        }
+        if (data[4] != hwwCMD) {
+            throw new Error('USB command frame mismatch (' + data[4] + ', expected ' + hwwCMD + ')');
+        }
+        let readLength = data[5] * 256 + data[6];
+        // console.log('---- response ----');
+        // console.log(JSON.stringify(Array.prototype.slice.call(data, 0)));
+        // console.log('-----------------');
+        let readBuffer = Buffer.allocUnsafe(readLength);
+        let alreadyRead = readBuffer.write(toString(data.slice(7), readLength), 0);
+        while (alreadyRead < readLength) {
+            data = device.readSync();
+            if (data.length < 5) {
+                throw new Error('Invalid response received from device');
+            }
+            alreadyRead += readBuffer.write(toString(data.slice(5), readLength), alreadyRead);
+        }
+    
+        let responseText = readBuffer.toString();
+        // console.log('=> ' + responseText);
+        let response = JSON.parse(responseText);
+        return response;
+    } catch (e) {
+        throw e
     }
 
-    let responseText = readBuffer.toString();
-    console.log('=> ' + responseText);
-    let response = JSON.parse(responseText);
-    return response;
 }
 
 /**
@@ -149,7 +163,7 @@ module.exports = class Communication {
      */
     constructor(deviceID) {
         if (!deviceID) {
-            console.error('device is not available')
+            // console.error('device is not available')
             throw new Error('device is not available')
         }
         this.device = hid.openDevice(deviceID)
@@ -167,12 +181,17 @@ module.exports = class Communication {
      * Sends a plain message to the dbb.
      */
     sendPlain(msg) {
-        console.log('\nsending: ' + msg);
-        sendFrame(this.device, msg)
-        // blocking call
-        let response = read(this.device);
-        console.log(JSON.stringify(response));
-        return response;
+        try {
+            // console.log('\nsending: ' + msg);
+            sendFrame(this.device, msg)
+            // blocking call
+            let response = read(this.device);
+            // console.log(JSON.stringify(response));
+            return response;
+
+        } catch (e) {
+            throw e
+        }
     }
 
     /**
@@ -182,29 +201,33 @@ module.exports = class Communication {
      * called before the decryption.
      */
      sendEncrypted(msg, callback, executeBeforeDecrypt) {
-        console.log('\nsending (encrypted): ' + msg);
-        if (!this.secret || this.secret == '') {
-            throw 'password required';
-        }
-        let d = this.device;
-        let s = this.secret;
-        let encryptedMsg = cryptography.encryptAES(this.secret, msg, function(data) {
-            console.log("=> " + data)
-            sendFrame(d, data);
-            let response = read(d);
-            console.log(JSON.stringify(response));
-            if (response.ciphertext) {
-                if (executeBeforeDecrypt) {
-                    executeBeforeDecrypt();
-                }
-                cryptography.decryptAES(s, response.ciphertext, function(data) {
-                    console.log("=> " + data)
-                    callback(JSON.parse(data));
-                });
-            } else {
-                callback(response);
+        try {
+            // console.log('\nsending (encrypted): ' + msg);
+            if (!this.secret || this.secret == '') {
+                throw 'password required';
             }
-        });
+            let d = this.device;
+            let s = this.secret;
+            let encryptedMsg = cryptography.encryptAES(this.secret, msg, function(data) {
+                // console.log("=> " + data)
+                sendFrame(d, data);
+                let response = read(d);
+                // console.log(JSON.stringify(response));
+                if (response.ciphertext) {
+                    if (executeBeforeDecrypt) {
+                        executeBeforeDecrypt();
+                    }
+                    cryptography.decryptAES(s, response.ciphertext, function(data) {
+                        // console.log("=> " + data)
+                        callback(JSON.parse(data));
+                    });
+                } else {
+                    callback(response);
+                }
+            });
+        } catch (e) {
+            throw e
+        }
     }
 
     setCommunicationSecret(password) {

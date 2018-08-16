@@ -1,7 +1,7 @@
 # BitBox NodeJS
 Node implementation of the communication layer using `node-hid` (USB).
 
-** This is not officially maintained by Digital BitBox developers. But we will do our best to keep it updated. **
+**This is not officially maintained by Digital BitBox developers. But we will do our best to keep it updated.**
 
 ## Example
 

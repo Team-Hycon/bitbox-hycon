@@ -71,13 +71,10 @@ export class BitBox {
     public async deviceInfo(): Promise<IResponseStatus> {
         return new Promise<IResponseStatus>((resolved, rejected) => {
             return this.communication.sendEncrypted('{"device": "info"}', (response: IResponseStatus) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
-                    resolved(response)
                 } else {
-                    rejected(response)
+                    resolved(response)
                 }
             })
         })
@@ -91,14 +88,11 @@ export class BitBox {
             const stretchedKey = stretchKey(this.password)
             // console.log("stretchedKey: " + stretchedKey)
             this.communication.sendEncrypted('{ "seed" : { "source" : "create", "key" : "' + stretchedKey + '", "filename" : "' + name + '.pdf" }}', (response: IResponseSeed) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
+                } else {
                     resolved(response)
                     this.seeded = true
-                } else {
-                    rejected(response)
                 }
             })
         })
@@ -110,13 +104,10 @@ export class BitBox {
                 rejected("Only 1 to 31 alphanumeric characters are allowed.")
             }
             this.communication.sendEncrypted('{"name": "' + name + '"}', (response: IResponseName) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
-                    resolved(response)
                 } else {
-                    rejected(response)
+                    resolved(response)
                 }
             })
         })
@@ -125,13 +116,10 @@ export class BitBox {
     public async deleteAllWallets() {
         return new Promise((resolved, rejected) => {
             this.communication.sendEncrypted('{"backup": "erase"}', (response: IResponseDelete) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
-                    resolved(response)
                 } else {
-                    rejected(response)
+                    resolved(response)
                 }
             })
         })
@@ -141,13 +129,10 @@ export class BitBox {
     public async getXPub(keypath: string) {
         return new Promise<IResponseGetXPub>((resolved, rejected) => {
             this.communication.sendEncrypted('{ "xpub" : "' + keypath + '" }', (response: IResponseGetXPub) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
-                    resolved(response)
                 } else {
-                    rejected(response)
+                    resolved(response)
                 }
             })
         })
@@ -158,22 +143,16 @@ export class BitBox {
             const signRequest1 = '{ "sign" : { "meta" : "hash", "data" : [{ "keypath" : "' + keypath + '", "hash" : "' + hash + '" }]}}'
             const signRequest2 = '{ "sign" : "" }'
             this.communication.sendEncrypted(signRequest1, (response1: IresponseEcho) => {
-                if (response1 instanceof Error) {
+                if (response1.error || response1 instanceof Error) {
                     rejected(response1)
-                }
-                if (!response1.error) {
+                } else {
                     this.communication.sendEncrypted(signRequest2, (response2: IResponseSign) => {
-                        if (response2 instanceof Error) {
+                        if (response2.error || response2 instanceof Error) {
                             rejected(response2)
-                        }
-                        if (!response2.error) {
-                            resolved(response2)
                         } else {
-                            rejected(response2)
+                            resolved(response2)
                         }
                     })
-                } else {
-                    rejected(response1)
                 }
             })
         })
@@ -182,16 +161,13 @@ export class BitBox {
     public async reset() {
         return new Promise((resolved, rejected) => {
             this.communication.sendEncrypted('{"reset": "__ERASE__"}', (response: IResponseReset) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
+                } else {
                     this.setPassword("")
                     this.initialize = false
                     this.seeded = false
                     resolved(response)
-                } else {
-                    rejected(response)
                 }
             })
         })
@@ -200,15 +176,12 @@ export class BitBox {
     public async updatePassword(password: string) {
         return new Promise((resolved, rejected) => {
             this.communication.sendEncrypted('{ "password" : "' + password + '" }', (response: IResponsePassword) => {
-                if (response instanceof Error) {
+                if (response.error || response instanceof Error) {
                     rejected(response)
-                }
-                if (!response.error) {
+                } else {
                     this.setPassword(password)
                     this.initialize = true
                     resolved(response)
-                } else {
-                    rejected(response)
                 }
             })
         })

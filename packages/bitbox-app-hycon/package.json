@@ -20,7 +20,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "main": "lib/bitbox.js",
+    "main": "lib/index.js",
     "scripts": {
         "clean": "rm -rf lib/ node_modules/",
         "build": "tsc --declaration",

@@ -1,6 +1,6 @@
 {
     "name": "@glosfer/bitbox-app-hycon",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Bitbox Hardware Wallet Node JS API for Hycon.",
     "keywords": [
         "Bitbox",
@@ -32,7 +32,7 @@
         "typescript": "^2.9.2"
     },
     "dependencies": {
-        "@glosfer/bitbox-nodejs": "^1.0.2",
+        "@glosfer/bitbox-nodejs": "^1.0.3",
         "pbkdf2": "^3.0.16"
     }
 }

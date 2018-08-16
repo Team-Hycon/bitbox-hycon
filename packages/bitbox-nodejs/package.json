@@ -1,6 +1,6 @@
 {
     "name": "@glosfer/bitbox-nodejs",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Node implementation of the communication layer using `node-hid` (USB)",
     "keywords": [
         "Bitbox",

@@ -6,12 +6,12 @@ const cryptography = require('./cryptography')
 // the frame size for USB communication
 const usbReportSize = 64
 // the hard ware wallet caller id
-const hwwCID        = 0xff000000
+const hwwCID = 0xff000000
 // initial frame identifier
 const u2fHIDTypeInit = 0x80
 // first vendor defined command
 const u2fHIDVendorFirst = u2fHIDTypeInit | 0x40
-const hwwCMD            = u2fHIDVendorFirst | 0x01
+const hwwCMD = u2fHIDVendorFirst | 0x01
 
 /**
  * Returns a buffer filled with the initial frame header,
@@ -78,6 +78,7 @@ function send(device, header, body, offset) {
         device.write(byteArray)
         return bytesOfBody;
     } catch (e) {
+        // console.error(`Bitbox communication layer error: ${e}`)
         throw e
     }
 }
@@ -100,8 +101,7 @@ function sendFrame(device, msg) {
         }
     } catch (e) {
         throw e
-    } 
-
+    }
 }
 
 function toString(bytes, length) {
@@ -117,7 +117,7 @@ function toString(bytes, length) {
  * The length of the data is always 64 bytes.
  */
 function read(device) {
-    try{
+    try {
         let data = device.readSync();
         if (data.length < 7) {
             throw new Error('Invalid response received from device');
@@ -141,15 +141,15 @@ function read(device) {
             }
             alreadyRead += readBuffer.write(toString(data.slice(5), readLength), alreadyRead);
         }
-    
+
         let responseText = readBuffer.toString();
         // console.log('=> ' + responseText);
         let response = JSON.parse(responseText);
         return response;
     } catch (e) {
+        // console.error(`Bitbox communication layer error: ${e}`)
         throw e
     }
-
 }
 
 /**
@@ -188,7 +188,6 @@ module.exports = class Communication {
             let response = read(this.device);
             // console.log(JSON.stringify(response));
             return response;
-
         } catch (e) {
             throw e
         }
@@ -200,15 +199,15 @@ module.exports = class Communication {
      * If the executeBeforeDecrypt callback is defined, it is
      * called before the decryption.
      */
-     sendEncrypted(msg, callback, executeBeforeDecrypt) {
-        try {
-            // console.log('\nsending (encrypted): ' + msg);
-            if (!this.secret || this.secret == '') {
-                throw 'password required';
-            }
-            let d = this.device;
-            let s = this.secret;
-            let encryptedMsg = cryptography.encryptAES(this.secret, msg, function(data) {
+    sendEncrypted(msg, callback, executeBeforeDecrypt) {
+        // console.log('\nsending (encrypted): ' + msg);
+        if (!this.secret || this.secret == '') {
+            throw 'password required';
+        }
+        let d = this.device;
+        let s = this.secret;
+        let encryptedMsg = cryptography.encryptAES(this.secret, msg, function (data) {
+            try {
                 // console.log("=> " + data)
                 sendFrame(d, data);
                 let response = read(d);
@@ -217,17 +216,17 @@ module.exports = class Communication {
                     if (executeBeforeDecrypt) {
                         executeBeforeDecrypt();
                     }
-                    cryptography.decryptAES(s, response.ciphertext, function(data) {
+                    cryptography.decryptAES(s, response.ciphertext, function (data) {
                         // console.log("=> " + data)
                         callback(JSON.parse(data));
                     });
                 } else {
                     callback(response);
                 }
-            });
-        } catch (e) {
-            throw e
-        }
+            } catch (e) {
+                callback(e)
+            }
+        });
     }
 
     setCommunicationSecret(password) {

@@ -65,170 +65,129 @@ export class BitBox {
     }
     // helper function, set password for communication encryption
     public setPassword(password: string) {
-        try {
-            this.communication.setCommunicationSecret(password)
-            this.password = password
-        } catch (e) {
-            throw e
-        }
+        this.communication.setCommunicationSecret(password)
+        this.password = password
     }
     public async deviceInfo(): Promise<IResponseStatus> {
-        try {
-            return new Promise<IResponseStatus>((resolved, rejected) => {
-                return this.communication.sendEncrypted('{"device": "info"}', (response: IResponseStatus) => {
-                    if (!response.error) {
-                        resolved(response)
-                    } else {
-                        rejected(response)
-                    }
-                })
+        return new Promise<IResponseStatus>((resolved, rejected) => {
+            return this.communication.sendEncrypted('{"device": "info"}', (response: IResponseStatus) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    resolved(response)
+                }
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     public async createWallet(name: any): Promise<IResponseSeed> {
-        try {
-            return new Promise<IResponseSeed>((resolved, rejected) => {
-                if (!name || !nameRegex.exec(name)) {
-                    rejected("Only 1 to 31 alphanumeric characters are allowed.")
+        return new Promise<IResponseSeed>((resolved, rejected) => {
+            if (!name || !nameRegex.exec(name)) {
+                rejected("Only 1 to 31 alphanumeric characters are allowed.")
+            }
+            const stretchedKey = stretchKey(this.password)
+            // console.log("stretchedKey: " + stretchedKey)
+            this.communication.sendEncrypted('{ "seed" : { "source" : "create", "key" : "' + stretchedKey + '", "filename" : "' + name + '.pdf" }}', (response: IResponseSeed) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    resolved(response)
+                    this.seeded = true
                 }
-                const stretchedKey = stretchKey(this.password)
-                // console.log("stretchedKey: " + stretchedKey)
-                this.communication.sendEncrypted('{ "seed" : { "source" : "create", "key" : "' + stretchedKey + '", "filename" : "' + name + '.pdf" }}', (response: IResponseSeed) => {
-                    if (!response.error) {
-                        resolved(response)
-                        this.seeded = true
-                    } else {
-                        rejected(response)
-                    }
-                })
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     public async setName(name: any): Promise<IResponseName> {
-        try {
-            return new Promise<IResponseName>((resolved, rejected) => {
-                if (!name || !nameRegex.exec(name)) {
-                    rejected("Only 1 to 31 alphanumeric characters are allowed.")
+        return new Promise<IResponseName>((resolved, rejected) => {
+            if (!name || !nameRegex.exec(name)) {
+                rejected("Only 1 to 31 alphanumeric characters are allowed.")
+            }
+            this.communication.sendEncrypted('{"name": "' + name + '"}', (response: IResponseName) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    resolved(response)
                 }
-                this.communication.sendEncrypted('{"name": "' + name + '"}', (response: IResponseName) => {
-                    if (!response.error) {
-                        resolved(response)
-                    } else {
-                        rejected(response)
-                    }
-                })
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     public async deleteAllWallets() {
-        try {
-            return new Promise((resolved, rejected) => {
-                this.communication.sendEncrypted('{"backup": "erase"}', (response: IResponseDelete) => {
-                    if (!response.error) {
-                        resolved(response)
-                    } else {
-                        rejected(response)
-                    }
-                })
+        return new Promise((resolved, rejected) => {
+            this.communication.sendEncrypted('{"backup": "erase"}', (response: IResponseDelete) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    resolved(response)
+                }
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     // get extended public key by specified keypath. for hycon "m/44'/1397'/0'/0/0"
     public async getXPub(keypath: string) {
-        try {
-            return new Promise<IResponseGetXPub>((resolved, rejected) => {
-                this.communication.sendEncrypted('{ "xpub" : "' + keypath + '" }', (response: IResponseGetXPub) => {
-                    if (!response.error) {
-                        resolved(response)
-                    } else {
-                        rejected(response)
-                    }
-                })
+        return new Promise<IResponseGetXPub>((resolved, rejected) => {
+            this.communication.sendEncrypted('{ "xpub" : "' + keypath + '" }', (response: IResponseGetXPub) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    resolved(response)
+                }
             })
-        } catch (e) {
-            throw e
-        }
-
+        })
     }
 
     public async sign(keypath: string, hash: string) {
-        try {
-            return new Promise<IResponseSign>((resolved, rejected) => {
-                const signRequest1 = '{ "sign" : { "meta" : "hash", "data" : [{ "keypath" : "' + keypath + '", "hash" : "' + hash + '" }]}}'
-                const signRequest2 = '{ "sign" : "" }'
-                this.communication.sendEncrypted(signRequest1, (response1: IresponseEcho) => {
-                    if (!response1.error) {
-                        this.communication.sendEncrypted(signRequest2, (response2: IResponseSign) => {
-                            if (!response2.error) {
-                                resolved(response2)
-                            } else {
-                                rejected(response2)
-                            }
-                        })
-                    } else {
-                        rejected(response1)
-                    }
-                })
+        return new Promise<IResponseSign>((resolved, rejected) => {
+            const signRequest1 = '{ "sign" : { "meta" : "hash", "data" : [{ "keypath" : "' + keypath + '", "hash" : "' + hash + '" }]}}'
+            const signRequest2 = '{ "sign" : "" }'
+            this.communication.sendEncrypted(signRequest1, (response1: IresponseEcho) => {
+                if (response1.error || response1 instanceof Error) {
+                    rejected(response1)
+                } else {
+                    this.communication.sendEncrypted(signRequest2, (response2: IResponseSign) => {
+                        if (response2.error || response2 instanceof Error) {
+                            rejected(response2)
+                        } else {
+                            resolved(response2)
+                        }
+                    })
+                }
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     public async reset() {
-        try {
-            return new Promise((resolved, rejected) => {
-                this.communication.sendEncrypted('{"reset": "__ERASE__"}', (response: IResponseReset) => {
-                    if (!response.error) {
-                        this.setPassword("")
-                        this.initialize = false
-                        this.seeded = false
-                        resolved(response)
-                    } else {
-                        rejected(response)
-                    }
-                })
+        return new Promise((resolved, rejected) => {
+            this.communication.sendEncrypted('{"reset": "__ERASE__"}', (response: IResponseReset) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    this.setPassword("")
+                    this.initialize = false
+                    this.seeded = false
+                    resolved(response)
+                }
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     public async updatePassword(password: string) {
-        try {
-            return new Promise((resolved, rejected) => {
-                this.communication.sendEncrypted('{ "password" : "' + password + '" }', (response: IResponsePassword) => {
-                    if (!response.error) {
-                        this.setPassword(password)
-                        this.initialize = true
-                        resolved(response)
-                    } else {
-                        rejected(response)
-                    }
-                })
+        return new Promise((resolved, rejected) => {
+            this.communication.sendEncrypted('{ "password" : "' + password + '" }', (response: IResponsePassword) => {
+                if (response.error || response instanceof Error) {
+                    rejected(response)
+                } else {
+                    this.setPassword(password)
+                    this.initialize = true
+                    resolved(response)
+                }
             })
-        } catch (e) {
-            throw e
-        }
+        })
     }
 
     public close() {
-        try {
-            this.communication.close()
-        } catch (e) {
-            throw e
-        }
+        this.communication.close()
     }
 }
